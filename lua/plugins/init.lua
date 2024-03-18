@@ -96,19 +96,19 @@ local default_plugins = {
     end,
   },
 
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   opts = function()
-  --     local opts = require "plugins.configs.treesitter"
-  --     opts.ensure_installed = {
-  --       "lua",
-  --       "javascript",
-  --       "typescript",
-  --       "tsx",
-  --     }
-  --     return opts
-  --   end,
-  -- },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function()
+      local opts = require "plugins.configs.treesitter"
+      opts.ensure_installed = {
+        "lua",
+        "javascript",
+        "typescript",
+        "tsx",
+      }
+      return opts
+    end,
+  },
 
   -- git stuff
   {
@@ -163,6 +163,23 @@ local default_plugins = {
 
       vim.g.mason_binaries_list = opts.ensure_installed
     end,
+  },
+
+ {
+    "mfussenegger/nvim-dap",
+    init = function()
+      require("core.utils").load_mappings("dap")
+    end
+  },
+
+  {
+    "leoluz/nvim-dap-go",
+    ft = "go",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function(_, opts)
+      require("dap-go").setup(opts)
+      require("core.utils").load_mappings("dap_go")
+    end
   },
 
   {
@@ -279,6 +296,14 @@ local default_plugins = {
     end,
   },
 
+  -- {
+  --   "jose-elias-alvarez/null-ls.nvim",
+  --   ft = "go",
+  --   opts = function()
+  --     return require "plugins.configs.null-ls"
+  --   end,
+  -- },
+
   -- Only load whichkey after all the gui
   {
     "folke/which-key.nvim",
@@ -290,6 +315,18 @@ local default_plugins = {
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "whichkey")
       require("which-key").setup(opts)
+    end,
+  },
+
+ {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    config = function(_, opts)
+      require("gopher").setup(opts)
+      require("core.utils").load_mappings("gopher")
+    end,
+    build = function()
+      vim.cmd [[silent! GoInstallDeps]]
     end,
   },
 
